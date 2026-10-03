@@ -1,0 +1,36 @@
+SemanticEye - why it is different (for the hackathon presentation)
+
+THE PROBLEM
+  Most plagiarism and AI detectors upload your document to a company's servers and return one
+  unexplained percentage. Students, journalists, lawyers and companies cannot send confidential work
+  to a third party, and a black-box score can wrongly accuse an honest writer.
+
+OUR ANSWER: FIVE THINGS OTHER DETECTORS DO NOT DO TOGETHER
+  1. Provably offline. A network guard blocks every outbound connection and counts attempts; a live
+     self-test button shows it. No account, no cloud, no model download.
+  2. Evidence, not a verdict. Every flag shows why: the matched source sentence with the copied words
+     highlighted, or the exact signals and points behind an AI-pattern score ("Why this score").
+  3. Honest uncertainty. It shows "n/a" when no sources were given, a reliability level for short
+     text, and a fairness note about non-native writers. It never claims proof.
+  4. Private library. Drop your own documents in a folder and every check compares against them,
+     with nothing leaving the machine.
+  5. Verifiable and repeatable. Build fingerprint (SHA-256 of the code) and a Report ID per result;
+     the same input always gives the same answer.
+
+FAST
+  Measured: 0.8 seconds for a 100,000-word document against a 100,000-word source (test machine, CPU only; run tests/test_all.py to measure yours).
+  No GPU, no model loading, no waiting for a download.
+
+SUGGESTED 2-MINUTE DEMO
+  1. Switch Wi-Fi off. Open the app. Click "Load demo", then "Check Plagiarism".
+  2. Point at the highlighted copied words and the source quote; open "Why this score".
+  3. Click "Run network self-test" and show the counter. Show the build fingerprint.
+  4. Click "AI Detector" to show the same text through the AI-pattern view. Download the report.
+
+BE READY FOR THESE QUESTIONS
+  Q: Can it find plagiarism from the internet?  A: No, by design. Offline means it checks against sources
+     you supply or keep in the library. That is the privacy trade-off, and the tool says so.
+  Q: Is the AI score accurate?  A: It is a transparent heuristic, calibrated on a small set of samples,
+     not validated on a large benchmark. We present it as a signal with reasons, never as proof.
+  Q: Why no neural network?  A: Neural models need a download and a GPU or slow CPU, and cannot explain
+     themselves. Ours runs anywhere, instantly, and every point can be audited.

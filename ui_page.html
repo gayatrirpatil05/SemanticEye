@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>SemanticEye - Offline Plagiarism and AI-Pattern Checker</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style nonce="__NONCE__">
+:root{--bg1:#fff;--bg2:#fff6e0;--tx:#111;--mut:#6b6b73;--card:#fff;--bd:#eee;--pan:#fafafa;--inp:#fff;--btn:#000;--btnt:#fff;--ok:#2f9e44;--ai:#e8590c;--cp:#e03131}
+:root[data-theme=dark]{--bg1:#14151a;--bg2:#1d1b16;--tx:#f2f2f2;--mut:#a0a0a8;--card:#1e1f26;--bd:#33343c;--pan:#262730;--inp:#17181d;--btn:#ffe45c;--btnt:#000}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--tx);background:linear-gradient(180deg,var(--bg1) 0%,var(--bg1) 22%,var(--bg2) 100%);min-height:100vh}
+nav{max-width:1200px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;gap:34px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:24px}
+.logo i{width:40px;height:40px;border-radius:10px;background:#ffe45c;display:grid;place-items:center}
+.logo svg{width:24px;height:24px}
+nav .tab{font-weight:600;cursor:pointer;padding-bottom:4px;border-bottom:3px solid transparent;background:none;border-top:0;border-left:0;border-right:0;color:var(--tx);font-size:16px;font-family:inherit}
+nav .tab.on{border-bottom-color:#ffd43b}
+.spacer{flex:1}
+.tg{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;padding:10px 16px;font-weight:600;cursor:pointer;font-size:15px;font-family:inherit}
+header{text-align:center;padding:36px 20px 24px}
+h1{font-size:60px;line-height:1.1;margin:0 0 18px;letter-spacing:-1.5px}
+header p{font-size:21px;color:var(--mut);max-width:760px;margin:0 auto;line-height:1.5}
+.priv{max-width:1130px;margin:0 auto 22px;text-align:center;color:var(--mut);font-size:14px;padding:0 16px}
+.priv b{color:var(--ok)}.priv summary{display:inline;cursor:pointer;text-decoration:underline}
+.inl{display:inline}[hidden]{display:none!important}
+.priv ul{text-align:left;max-width:680px;margin:10px auto;line-height:1.7}
+.card{max-width:1130px;margin:20px auto 50px;background:var(--card);border:1px solid var(--bd);border-radius:36px;padding:30px;display:grid;grid-template-columns:1.25fr 1fr;gap:28px;box-shadow:0 8px 40px #0000000d}
+h2{font-size:26px;margin:0 0 16px}
+textarea{width:100%;height:300px;border:1px solid #888;border-radius:14px;padding:22px;font-size:19px;font-family:inherit;resize:vertical;outline:none;background:var(--inp);color:var(--tx)}
+textarea:focus{border-color:#ffd43b}
+#src{height:110px;font-size:15px;margin-top:8px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;color:var(--mut);font-size:15px;gap:10px;flex-wrap:wrap}
+details{margin-top:12px}summary{cursor:pointer;font-weight:600}
+.up{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.up label,.lnk{border:1px dashed #999;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:600;font-size:15px;color:var(--tx);background:none;font-family:inherit}
+.up input{display:none}
+.x{cursor:pointer;color:var(--cp);font-weight:700;background:none;border:0;font-size:16px;font-family:inherit}
+.go{background:var(--btn);color:var(--btnt);border:0;border-radius:12px;padding:14px 34px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit}
+.go:disabled{opacity:.5;cursor:wait}
+.clr{background:transparent;color:var(--tx);border:1px solid #888;border-radius:12px;padding:14px 26px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit}
+.btns{display:flex;gap:10px}
+.panel{background:var(--pan);border-radius:26px;padding:26px;min-height:420px}
+.panel h3{font-size:25px;margin:0 0 24px}
+.chk{display:flex;align-items:center;gap:14px;font-size:18px;margin:18px 0}
+.chk b{width:30px;height:30px;border-radius:50%;border:2px solid var(--tx);background:#ffe45c;display:grid;place-items:center;flex:none}
+.chk svg{width:16px;height:16px}
+.hint{margin-top:44px;text-align:center;color:var(--mut)}.hint svg{width:76px;height:76px}
+.gauges{display:flex;gap:18px;justify-content:space-around;margin-bottom:14px}
+.g{text-align:center}.g svg{width:130px;height:130px}.g text{fill:var(--tx);font-family:inherit}
+.g div{font-weight:600;margin-top:4px}
+.v{font-size:19px;font-weight:700;text-align:center;margin:6px 0 4px}
+.sub{font-size:14px;color:var(--mut);text-align:center;margin:0 0 14px}
+.pill{display:inline-block;padding:4px 14px;border-radius:20px;color:#fff}
+.bar{height:12px;background:#8883;border-radius:8px;overflow:hidden;margin:4px 0 10px}.bar div{height:100%}
+.lab{font-size:14px;display:flex;justify-content:space-between}
+.meta{font-size:13px;color:var(--mut);margin:12px 0;line-height:1.6}
+.why{margin-top:10px;font-size:14px}.why li{margin:7px 0;line-height:1.45}
+.why .p{font-weight:700}.why .up1{color:var(--ai)}.why .dn1{color:var(--ok)}
+.bt2{display:flex;gap:8px;margin-top:8px}
+.copy{flex:1;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:10px;font-weight:600;cursor:pointer;font-family:inherit}
+.sent{max-width:1130px;margin:-20px auto 30px;padding:0 10px}
+.shead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.shead label{font-size:15px;color:var(--mut);cursor:pointer}
+.s{background:var(--card);border:1px solid var(--bd);border-left:6px solid var(--ok);border-radius:12px;padding:12px 16px;margin:10px 0;font-size:17px;line-height:1.5}
+.s.ai{border-left-color:var(--ai)}.s.copied{border-left-color:var(--cp)}
+.s mark{background:#ffd8d8;color:inherit;border-radius:3px;padding:0 2px}
+:root[data-theme=dark] .s mark{background:#5a2323}
+.s small{display:block;color:var(--mut);margin-top:6px;font-size:13px}
+.s blockquote{margin:8px 0 0;padding:6px 12px;border-left:3px solid var(--bd);color:var(--mut);font-size:14px}
+.more{display:block;margin:14px auto;border:1px solid #888;background:none;color:var(--tx);border-radius:10px;padding:10px 20px;font-weight:600;cursor:pointer;font-family:inherit}
+.err{color:var(--cp);font-weight:600}
+.trust{max-width:1130px;margin:0 auto 50px;padding:16px 22px;border:1px solid var(--bd);border-radius:20px;background:var(--card);font-size:13.5px;color:var(--mut);display:flex;gap:10px 26px;flex-wrap:wrap;align-items:center;justify-content:center}
+.trust b{color:var(--tx)}.trust .good{color:var(--ok);font-weight:700}
+.trust button{border:1px solid #888;background:none;color:var(--tx);border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600;font-family:inherit;font-size:13px}
+.note{max-width:1130px;margin:-34px auto 18px;padding:0 16px;text-align:center;font-size:13px;color:var(--mut)}
+@media(max-width:900px){.card{grid-template-columns:1fr}h1{font-size:38px}nav{gap:14px;flex-wrap:wrap}}
+</style></head><body>
+<nav><div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3.2"/></svg></i>SemanticEye</div>
+<button class="tab" id="t-ai" type="button">AI Detector</button><button class="tab on" id="t-pl" type="button">Plagiarism Checker</button>
+<div class="spacer"></div><button class="tg" id="theme" type="button">Dark mode</button></nav>
+<header><h1 id="title">Smart Plagiarism Checker</h1>
+<p id="sub">Guarantee the uniqueness and authenticity of your content. Runs fully offline, so your writing never leaves this computer.</p></header>
+<div class="priv"><b>Private and secure.</b> Your text is analysed only on this computer, with no internet connection used or needed.
+ <details class="inl"><summary>How is my data protected?</summary><ul>
+ <li>Nothing you paste or upload is sent anywhere. A built-in network guard blocks every outbound connection and counts attempts (see the bar at the bottom of the page).</li>
+ <li>Nothing is saved: no history, no logs, no database. Uploaded files are read from memory and are never written to disk.</li>
+ <li>No AI model and no download: results come from transparent statistics that run on your own CPU.</li>
+ <li>The app is reachable only from this computer, protected by a random per-session key, and refuses requests from other websites.</li>
+ <li>Scripts on the page are locked down with a strict content policy; your text is never inserted as HTML.</li>
+ <li>Press Clear to wipe the text, files and results from the screen instantly.</li></ul></details></div>
+<div class="card">
+ <div><h2 id="ctitle">Plagiarism Checker</h2>
+  <textarea id="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Start typing or paste your text here"></textarea>
+  <div class="up"><label for="file">Upload PDF / DOCX / TXT (up to 50 MB)</label><input type="file" id="file" accept=".pdf,.docx,.txt,.md">
+   <span id="fname"></span><button class="x" id="fx" type="button" hidden aria-label="Remove file">Remove</button></div>
+  <details><summary>Add sources to compare against (optional)</summary>
+   <textarea id="src" autocomplete="off" spellcheck="false" placeholder="Paste the original / reference text here..."></textarea>
+   <div class="up"><label for="sfiles">Add source files</label><input type="file" id="sfiles" accept=".pdf,.docx,.txt,.md" multiple><span id="sfname"></span></div>
+   <p class="meta" id="libnote"></p></details>
+  <div class="row"><span id="wc">0 words</span><div class="btns"><button class="lnk" id="demo" type="button">Load demo</button><button class="clr" id="clear" type="button">Clear</button><button class="go" id="go" type="button">Check Plagiarism</button></div></div>
+ </div>
+ <div class="panel" id="panel"></div>
+</div>
+<div class="sent" id="sent"></div>
+<div class="trust" id="trust">
+ <span>Network guard: <span class="good" id="tg-state">checking</span></span>
+ <span>Outbound attempts blocked: <b id="tg-n">0</b></span>
+ <span>Stored data: <b>none</b></span>
+ <span>Build fingerprint: <b id="fp">-</b></span>
+ <button id="selftest" type="button">Run network self-test</button><span id="st-out"></span>
+</div>
+<script nonce="__NONCE__">
+const TOKEN="__TOKEN__", DEMO=__DEMO__;
+const COL={original:'#2f9e44',ai_pattern:'#e8590c',matched:'#e03131'};
+const NS='http://www.w3.org/2000/svg';
+const VERDICT={original:['Looks original','#2f9e44'],mixed:['Some signals, review advised','#f08c00'],ai_pattern:['Strong AI-style patterns','#e8590c'],
+ matched:['Matches found in your sources','#e03131'],matched_and_ai:['Matches and AI-style patterns','#c92a2a']};
+let mode='pl', fileData=null, fileName='', srcFiles=[], last=null, copied=false, shown=0, onlyFlagged=false;
+const $=id=>document.getElementById(id);
+function el(t,c,kids){const e=document.createElement(t);if(c)e.className=c;for(const k of (kids||[]))if(k!=null)e.append(k);return e}
+function sv(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e}
+function api(path,body){return fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Token':TOKEN},body:JSON.stringify(body||{})}).then(r=>r.json())}
+
+const CHECK='<svg viewBox="0 0 16 16" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"/></svg>';
+const LENS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>';
+function intro(){const p=$('panel');p.replaceChildren();
+ p.append(el('h3',null,[mode==='pl'?'Try Our Plagiarism Detector':'Try Our AI Detector']));
+ for(const t of ['Results in about a second, even for long documents','Works with the internet switched off','Every flag comes with a plain-language reason','Compare against your own private library of documents']){
+  const d=el('div','chk');const b=el('b');b.insertAdjacentHTML('beforeend',CHECK);d.append(b,t);p.append(d)}
+ const h=el('div','hint');h.insertAdjacentHTML('beforeend',LENS);p.append(h)}
+
+function setTab(m){mode=m;$('t-pl').className=m==='pl'?'on':'';$('t-ai').className=m==='ai'?'on':'';
+ $('title').textContent=m==='pl'?'Smart Plagiarism Checker':'Smart AI Pattern Detector';
+ $('ctitle').textContent=m==='pl'?'Plagiarism Checker':'AI Detector';
+ $('go').textContent=m==='pl'?'Check Plagiarism':'Detect AI Patterns';
+ $('sub').textContent=m==='pl'?'Guarantee the uniqueness and authenticity of your content. Runs fully offline, so your writing never leaves this computer.'
+  :'See which sentences read like machine-written text, and exactly why. Runs fully offline.';
+ if(last)render(last);else intro()}
+function toggleTheme(){const r=document.documentElement,d=r.dataset.theme!=='dark';r.dataset.theme=d?'dark':'light';$('theme').textContent=d?'Light mode':'Dark mode'}
+function words(){const t=$('text').value.trim();return t?t.split(/\s+/).length:0}
+function count(){$('wc').textContent=fileData?'File attached':words().toLocaleString()+' words'}
+function readB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
+async function pick(){const f=$('file').files[0];if(!f)return;
+ if(f.size>50*1024*1024){alert('File is larger than 50 MB.');$('file').value='';return}
+ fileData=await readB64(f);fileName=f.name;$('fname').textContent=f.name;$('fx').hidden=false;count()}
+function clearFile(){fileData=null;fileName='';$('file').value='';$('fname').textContent='';$('fx').hidden=true;count()}
+async function pickSrc(){srcFiles=[];const fs=[...$('sfiles').files];
+ for(const f of fs){if(f.size>50*1024*1024){alert(f.name+' is larger than 50 MB.');continue}srcFiles.push({name:f.name,b64:await readB64(f)})}
+ $('sfname').textContent=srcFiles.length?srcFiles.length+' source file(s)':''}
+function clearAll(){$('text').value='';$('src').value='';$('sfiles').value='';srcFiles=[];$('sfname').textContent='';clearFile();last=null;
+ $('sent').replaceChildren();intro();count();
+ if(copied){try{navigator.clipboard.writeText('')}catch(e){}copied=false}}
+function loadDemo(){clearFile();$('text').value=DEMO.text;$('src').value=DEMO.source;$('src').closest('details').open=true;count()}
+
+function gauge(pct,color,label,sub){const r=52,C=2*Math.PI*r,g=el('div','g');
+ const s=sv('svg',{viewBox:'0 0 130 130'});
+ s.append(sv('circle',{cx:65,cy:65,r:r,fill:'none',stroke:'#8883','stroke-width':14}));
+ if(pct!=null)s.append(sv('circle',{cx:65,cy:65,r:r,fill:'none',stroke:color,'stroke-width':14,'stroke-linecap':'round','stroke-dasharray':(C*pct/100)+' '+C,transform:'rotate(-90 65 65)'}));
+ const t=sv('text',{x:65,y:74,'text-anchor':'middle','font-size':pct==null?20:26,'font-weight':700});t.textContent=pct==null?'n/a':Math.round(pct)+'%';s.append(t);
+ g.append(s,el('div',null,[label]));if(sub){const d=el('div');d.style.fontWeight='400';d.style.fontSize='12px';d.style.color='var(--mut)';d.textContent=sub;g.append(d)}return g}
+
+function render(d){const p=$('panel');p.replaceChildren();p.append(el('h3',null,['Results']));
+ const gs=el('div','gauges');
+ const gp=gauge(d.plagiarism_pct,'#e03131','Plagiarism',d.plagiarism_pct==null?'no sources given':null);
+ const ga=gauge(d.ai_pct,'#e8590c','AI-pattern signal',d.ai_band+' signal');
+ if(mode==='pl')gs.append(gp,ga);else gs.append(ga,gp);p.append(gs);
+ const vv=VERDICT[d.verdict];const v=el('div','v',['Assessment: ']);const pill=el('span','pill',[vv[0]]);pill.style.background=vv[1];v.append(pill);p.append(v);
+ p.append(el('div','sub',['Reliability of this reading: '+d.reliability+(d.reliability==='low'?' (text is short)':'')]));
+ const names={original:'Original-looking',ai_pattern:'AI-style patterns',matched:'Matched to a source'};
+ for(const k of ['original','ai_pattern','matched']){const l=el('div','lab',[el('span',null,[names[k]]),el('span',null,[d.shares[k].toFixed(1)+'% of words'])]);
+  const b=el('div','bar');const f=el('div');f.style.width=d.shares[k]+'%';f.style.background=COL[k];b.append(f);p.append(l,b)}
+ const dt=el('details');dt.append(el('summary',null,['Why this score']));const ul=el('ul','why');
+ for(const r of d.reasons){if(r.effect==='neutral')continue;const li=el('li');
+  const pt=el('span','p '+(r.points>0?'up1':'dn1'),[(r.points>0?'+':'')+r.points.toFixed(2)+' ']);
+  li.append(pt,el('b',null,[r.signal+': ']),r.detail+' ('+r.effect+' the AI-pattern signal)');ul.append(li)}
+ dt.append(ul);p.append(dt);
+ const st=d.stats;p.append(el('div','meta',[st.words.toLocaleString()+' words in '+st.seconds+' s. Compared with '+st.sources+' source document(s)'+(st.library_docs?' (including '+st.library_docs+' from your library)':'')+'. Report ID '+d.report_id+'. Same text and sources always give the same result.']));
+ p.append(el('div','meta',[d.fairness]));
+ const row=el('div','bt2');const c1=el('button','copy',['Copy report']);c1.id='cp';c1.type='button';const c2=el('button','copy',['Download report']);c2.type='button';
+ c1.addEventListener('click',copyReport);c2.addEventListener('click',downloadReport);row.append(c1,c2);p.append(row);
+ shown=0;onlyFlagged=d.sentences.length>600;drawSentences(d)}
+
+function drawSentences(d,append){const box=$('sent');
+ if(!append){box.replaceChildren();const h=el('div','shead',[el('h2',null,['Sentence breakdown'])]);
+  const lb=el('label'),cb=el('input');cb.type='checkbox';cb.checked=onlyFlagged;cb.id='flagonly';
+  cb.addEventListener('change',()=>{onlyFlagged=cb.checked;shown=0;drawSentences(last)});lb.append(cb,' Show flagged sentences only');h.append(lb);box.append(h);
+  const list=el('div');list.id='slist';box.append(list)}
+ const list=$('slist');
+ const rows=d.sentences.filter(s=>!onlyFlagged||s.flag!=='ok');
+ const end=Math.min(rows.length,shown+500);
+ for(const s of rows.slice(shown,end))list.append(sentCard(s));
+ shown=end;const old=$('morebtn');if(old)old.remove();
+ if(shown<rows.length){const b=el('button','more',['Show '+Math.min(500,rows.length-shown)+' more of '+(rows.length-shown)+' remaining']);b.id='morebtn';b.type='button';b.addEventListener('click',()=>drawSentences(d,true));box.append(b)}
+ if(!rows.length)list.append(el('p','sub',['No flagged sentences.']))}
+
+function sentCard(s){const c=el('div','s '+s.flag);let pos=0;
+ for(const [a,b] of (s.spans||[])){if(a>pos)c.append(s.text.slice(pos,a));c.append(el('mark',null,[s.text.slice(a,b)]));pos=b}
+ if(pos<s.text.length)c.append(s.text.slice(pos));
+ const tag={ok:'Original-looking',ai:'AI-style pattern',copied:s.match_type==='reworded'?'Reworded match':'Verbatim match'}[s.flag];
+ let info=tag+' | AI-pattern '+Math.round(s.ai_prob*100)+'%';
+ if(s.similarity!=null&&s.flag==='copied')info+=' | source similarity '+Math.round(s.similarity*100)+'%';
+ const sm=el('small',null,[info]);c.append(sm);
+ if(s.why&&s.why.length)c.append(el('small',null,['Why: '+s.why.join('; ')]));
+ if(s.source){const q=el('blockquote',null,['Source: '+s.source+' - "'+s.source_text+'"']);c.append(q)}
+ return c}
+
+function reportText(){const d=last;const L=['SemanticEye report','Report ID: '+d.report_id+'   Engine: '+d.engine,
+ 'Assessment: '+VERDICT[d.verdict][0],'Plagiarism: '+(d.plagiarism_pct==null?'n/a (no sources provided)':d.plagiarism_pct+'%'),
+ 'AI-pattern signal: '+d.ai_pct+'% ('+d.ai_band+'), reliability '+d.reliability,
+ 'Share of words - original '+d.shares.original+'%, AI-style '+d.shares.ai_pattern+'%, matched '+d.shares.matched+'%',
+ d.stats.words+' words, '+d.stats.sentences+' sentences, '+d.stats.sources+' source document(s)','','Why:'];
+ for(const r of d.reasons)if(r.effect!=='neutral')L.push('  '+(r.points>0?'+':'')+r.points.toFixed(2)+' '+r.signal+': '+r.detail);
+ L.push('','Flagged sentences only:');let n=0;
+ for(const s of d.sentences)if(s.flag!=='ok'){n++;L.push('['+(s.flag==='ai'?'AI-STYLE':'MATCHED')+'] '+s.text);if(s.source)L.push('    source ('+s.source+'): '+s.source_text)}
+ if(!n)L.push('  none');L.push('',d.fairness);return L.join('\n')}
+function copyReport(){if(!last)return;navigator.clipboard.writeText(reportText()).then(()=>{copied=true;$('cp').textContent='Copied'})}
+function downloadReport(){if(!last)return;const u=URL.createObjectURL(new Blob([reportText()],{type:'text/plain'}));const a=document.createElement('a');
+ a.href=u;a.download='SemanticEye_report_'+last.report_id+'.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+
+async function status(){try{const s=await api('/status');$('tg-state').textContent=s.guard_active?'active, outbound blocked':'NOT active';
+ $('tg-n').textContent=s.blocked;$('fp').textContent=s.fingerprint;
+ $('libnote').textContent=s.library.docs?('Private library: '+s.library.docs+' document(s) in the library folder are always checked too.'):'Private library: put files in the library folder next to the app and they are checked automatically.'}catch(e){$('tg-state').textContent='unavailable'}}
+async function selftest(){$('st-out').textContent='testing...';const r=await api('/selftest');
+ $('st-out').textContent=r.all_blocked?'Passed: attempts to reach 8.8.8.8 and resolve example.com were blocked.':'FAILED: an outside connection was possible.';await status()}
+
+async function run(){
+ if(!fileData&&words()<1){const p=$('panel');p.replaceChildren(el('h3',null,['Nothing to check']),el('p','err',['Please enter some text or upload a file.']));return}
+ const b=$('go');b.disabled=true;const old=b.textContent;b.textContent='Analysing...';
+ const p=$('panel');p.replaceChildren(el('h3',null,['Analysing...']));$('sent').replaceChildren();
+ try{const body={text:$('text').value,source:$('src').value,source_files:srcFiles};if(fileData){body.file_b64=fileData;body.file_name=fileName}
+  const d=await api('/analyze',body);
+  if(d.error){last=null;p.replaceChildren(el('h3',null,['Something went wrong']),el('p','err',[d.error]));return}
+  last=d;render(d)
+ }catch(e){p.replaceChildren(el('h3',null,['Something went wrong']),el('p','err',['The request failed. Is the black window still open?']))}
+ finally{b.disabled=false;b.textContent=old;status()}}
+
+$('t-ai').addEventListener('click',()=>setTab('ai'));$('t-pl').addEventListener('click',()=>setTab('pl'));
+$('theme').addEventListener('click',toggleTheme);$('text').addEventListener('input',count);
+$('file').addEventListener('change',pick);$('fx').addEventListener('click',clearFile);$('sfiles').addEventListener('change',pickSrc);
+$('clear').addEventListener('click',clearAll);$('go').addEventListener('click',run);$('demo').addEventListener('click',loadDemo);$('selftest').addEventListener('click',selftest);
+if(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.dataset.theme='dark';$('theme').textContent='Light mode'}
+intro();status();
+</script></body></html>

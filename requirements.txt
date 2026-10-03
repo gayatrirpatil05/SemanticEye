@@ -1,0 +1,2 @@
+# Nothing to install. SemanticEye runs on the Python standard library.
+# PDF reading uses the bundled copy of pypdf in vendor/ (BSD licence, see vendor/pypdf-LICENSE.txt).

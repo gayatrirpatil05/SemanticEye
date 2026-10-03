@@ -1,0 +1,13 @@
+SemanticEye (offline edition) - START HERE
+
+1. Extract the zip.
+2. Open the "semanticeye" folder and double-click  run_ui.bat
+   (Mac/Linux: run  ./run_ui.sh)
+3. Your browser opens at http://localhost:8000
+4. Click "Load demo" then "Check Plagiarism" to see it work in a second.
+
+No installation. No internet. No model download. Needs only Python 3.9 or newer.
+To stop: close the black window.
+
+Check that it really is offline: switch Wi-Fi off, or press "Run network self-test" at the bottom of the page.
+Run the automated checks:  python tests/test_all.py

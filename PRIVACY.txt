@@ -1,0 +1,34 @@
+SemanticEye - Privacy and Security
+
+WHAT HAPPENS TO YOUR TEXT
+- Analysed only on YOUR computer, in memory. Never sent to any website, server or cloud.
+- No AI model, no cloud API, no download at any time, not even on first run.
+- Not saved anywhere: no history, no logs, no database, no cache.
+- Uploaded files are read straight from memory. SemanticEye never writes them to disk.
+- Closing the black window erases everything held in memory.
+- The Clear button wipes text, files and results from the screen instantly.
+
+PROOF, NOT PROMISES
+- Network guard: when the program starts, outbound connections and name lookups are blocked inside the
+  process (only this computer talking to itself is allowed). The page shows how many attempts were blocked.
+- "Run network self-test" really tries to reach 8.8.8.8 and resolve example.com, and shows they fail.
+- Build fingerprint: SHA-256 of the program's own source files is shown on the page, so anyone can
+  confirm they are running the code they reviewed.
+- Deterministic: the same text and sources always give the same result and the same Report ID.
+- Only third-party code: bundled pypdf (BSD licence) for reading PDFs. Everything else is the Python standard library.
+- Honest scope: the guard covers this program. For absolute assurance also switch off Wi-Fi; it works the same.
+
+SECURITY MEASURES
+- Server listens on 127.0.0.1 only: other devices on your network cannot reach it.
+- A random secret key is created each start; requests without it are refused, so other websites open in
+  your browser cannot use the app. Host and Origin checks block DNS-rebinding.
+- Strict Content-Security-Policy with a per-page nonce (no inline event handlers, no external resources),
+  no caching, no framing, no referrer. Your text is inserted into the page as text only, never as HTML.
+- Only PDF / DOCX / TXT / MD accepted, 50 MB cap per file. DOCX files are checked for zip bombs and
+  XML entity tricks. Error messages never repeat your text. Request logging is disabled.
+- Browser spell-check and autocomplete are off in the text boxes, because some browsers send typed text to
+  cloud spell-check services.
+
+YOUR PART
+- Do not share your screen while results are showing. Use Clear on a shared computer.
+- Windows itself may keep copies if you copy text to the clipboard or in the page file.
